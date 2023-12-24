@@ -2,7 +2,7 @@ import sys
 from random import randint
 
 from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtGui import QIntValidator, QKeySequence, QShortcut
+from PyQt6.QtGui import QIntValidator
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -53,18 +53,18 @@ class Ui_MainWindow(object):
         self.checkButton.clicked.connect(self.run_game)
         
 
-        self.InputLine = QtWidgets.QLineEdit(parent=self.centralwidget)
-        self.InputLine.setGeometry(QtCore.QRect(50, 210, 60, 60))
+        self.inputLine = QtWidgets.QLineEdit(parent=self.centralwidget)
+        self.inputLine.setGeometry(QtCore.QRect(50, 210, 60, 60))
         font = QtGui.QFont()
         font.setFamily("Verdana")
         font.setPointSize(20)
-        self.InputLine.setFont(font)
-        self.InputLine.setText("")
-        self.InputLine.setMaxLength(2)
-        self.InputLine.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.InputLine.setObjectName("InputLine")
+        self.inputLine.setFont(font)
+        self.inputLine.setText("")
+        self.inputLine.setMaxLength(2)
+        self.inputLine.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.inputLine.setObjectName("InputLine")
         int_validator = QIntValidator(0, 99)
-        self.InputLine.setValidator(int_validator)
+        self.inputLine.setValidator(int_validator)
         
         
         self.outputLine = QtWidgets.QLabel(parent=self.centralwidget)
@@ -92,28 +92,26 @@ class Ui_MainWindow(object):
         
         
     def run_game(self):
-
-        if self.InputLine.text() != '':
-            
-            if self.game.finished == True:
-                self.game.random = randint(0, 99)
-                self.game.stage = 1
-                self.InputLine.setDisabled(False)
-                self.hintLine.setText("Загадано число от 0 до 100.")
-                self.checkButton.setText("Угадал?")
-                self.outputLine.setText("У тебя 5 попыток отгадать.")
-                self.game.finished = False
-                return
-
-            input_num = int(self.InputLine.text())
-            
+        
+        if self.game.finished == True:
+                        self.game.random = randint(0, 99)
+                        self.game.stage = 1
+                        self.inputLine.setDisabled(False)
+                        self.hintLine.setText("Загадано число от 0 до 100.")
+                        self.checkButton.setText("Угадал?")
+                        self.outputLine.setText("У тебя 5 попыток отгадать.")
+                        self.game.finished = False
+                        return
+        
+        if self.inputLine.text() != '':
+            input_num = int(self.inputLine.text())
             
             if self.game.game_stage() == 5 and input_num != self.game.random:
                 self.hintLine.setText('Ты проиграл!')
                 self.outputLine.setText(f'Загадано было число {self.game.random}.')  
                 self.checkButton.setText('Заново')
-                self.InputLine.clear()
-                self.InputLine.setDisabled(True)
+                self.inputLine.clear()
+                self.inputLine.setDisabled(True)
                 self.game.finished = True
                 return
 
@@ -121,8 +119,8 @@ class Ui_MainWindow(object):
                 self.hintLine.setText('Угадал!')
                 self.outputLine.setText('Поздравляю!')
                 self.checkButton.setText('Заново')
-                self.InputLine.clear()
-                self.InputLine.setDisabled(True)
+                self.inputLine.clear()
+                self.inputLine.setDisabled(True)
                 self.game.finished = True
                 return
 
@@ -133,7 +131,7 @@ class Ui_MainWindow(object):
                     self.hintLine.setText('Нет, загаданное число меньше.')
                 self.outputLine.setText(f'Уже {5 - self.game.stage}.')
                 self.game.stage += 1  
-                self.InputLine.clear()
+                self.inputLine.clear()
                 return
         
 
